@@ -3,6 +3,22 @@ const router = express.Router();
 const db = require('../../db/connection');
 const inputCheck = require('../../utils/inputCheck');
 
+// Get the total votes for all the candidates
+router.get('/votes', (req, res) => {
+    const sql = `SELECT * FROM votes`;
+
+    db.query(sql, (err, rows) => {
+      if (err) {
+        res.status(500).json({ error: err.message });
+        return;
+      }
+      res.json({
+        message: 'success',
+        data: rows
+      });
+    });
+});
+
 router.post('/vote', ({ body }, res) => {
     // Data validation
     const errors = inputCheck(body, 'voter_id', 'candidate_id');
@@ -26,6 +42,7 @@ router.post('/vote', ({ body }, res) => {
       });
     });
 });
+
 
 module.exports = router;
 
